@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+    id 'org.openjfx.javafxplugin' version '0.0.7'
+}
+
+group 'JCoreFX'
+version '1.0'
+
+javafx {
+    version = "11.0.1"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media' ]
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+}
+
+wrapper {
+    gradleVersion = '5.4.1'
+    distributionUrl = distributionUrl.replace("bin", "all")
+}

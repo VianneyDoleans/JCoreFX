@@ -1,0 +1,11 @@
+{
+  "name": "JCoreFX",
+  "window": {
+    "minHeight": "560",
+    "minWidth": "1000",
+    "offset": "100"
+  },
+  "layout": {
+    "configPath": "./configuration/sceneConfiguration.json"
+  }
+}
