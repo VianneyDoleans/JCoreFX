@@ -1,18 +1,23 @@
 package JCoreFX;
 
 import JCoreFX.core.jsonConstruction.JSONFile;
+import JCoreFX.core.log.Log;
 import JCoreFX.core.manager.LayoutManager;
 import JCoreFX.core.manager.LinkManager;
 import JCoreFX.core.manager.ServiceManager;
 import JCoreFX.core.manager.ServiceUpdater;
 import JCoreFX.core.linkConstruction.Link;
 import JCoreFX.core.moduleConstruction.AModule;
+import JCoreFX.services.data.DataService;
 import JCoreFX.services.layout.LayoutService;
 import JCoreFX.tools.ExceptionsCatch;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.logging.Level;
 
 public class JCoreFX {
 
@@ -28,6 +33,7 @@ public class JCoreFX {
         //notificationManager = new NotificationManager(serviceManager);
         this.serviceUpdater = new ServiceUpdater(serviceManager);//, notificationManager);
         this.layoutManager = new LayoutManager();
+        this.serviceManager.addResource(new DataService());
         this.serviceManager.addResource(new LayoutService((this.layoutManager)));
         this.serviceUpdater.setRun(true);
     }
@@ -37,10 +43,14 @@ public class JCoreFX {
     }
 
     private void InitEventCloseScene(Stage stage) {
+        EventHandler<WindowEvent> event =  stage.getOnCloseRequest();
         stage.setOnCloseRequest(t -> {
             try {
+                event.handle(t);
                 this.layoutManager.saveConfiguration(this.config.get("layout.configPath"));
                 serviceUpdater.setRun(false);
+                Log.getInstance().write(Level.INFO,"close JCoreFX");
+                Log.getInstance().close();
             } catch (InterruptedException e) {
                 ExceptionsCatch.PrintErrors(e);
             }

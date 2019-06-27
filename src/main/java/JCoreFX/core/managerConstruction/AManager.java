@@ -36,7 +36,7 @@ public abstract class AManager<T extends AManagerItem> {
 
             return result;
         }
-        Log.getInstance().write(Level.SEVERE, "Error: No ressource with name : " + name);
+        Log.getInstance().write(Level.SEVERE, "Error: No resource with name : " + name);
         return null;
     }
 
