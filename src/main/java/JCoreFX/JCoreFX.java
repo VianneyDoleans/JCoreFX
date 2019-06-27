@@ -43,10 +43,10 @@ public class JCoreFX {
     }
 
     private void InitEventCloseScene(Stage stage) {
-        EventHandler<WindowEvent> event =  stage.getOnCloseRequest();
+        //EventHandler<WindowEvent> event =  stage.getOnCloseRequest();
         stage.setOnCloseRequest(t -> {
             try {
-                event.handle(t);
+                //event.handle(t);
                 this.layoutManager.saveConfiguration(this.config.get("layout.configPath"));
                 serviceUpdater.setRun(false);
                 Log.getInstance().write(Level.INFO,"close JCoreFX");

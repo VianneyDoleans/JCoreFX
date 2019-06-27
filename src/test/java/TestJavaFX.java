@@ -43,14 +43,24 @@ public abstract class TestJavaFX
 
     private void initCloseWindow(Stage window)
     {
-        window.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                System.out.println("Stage is closing");
-                run = true;
-                synchronized (TestJavaFX.this) {
-                    TestJavaFX.this.notify();
-                    System.out.println("notify");
-                }
+        window.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> {
+            System.out.println("Stage is closing");
+            run = true;
+            synchronized (TestJavaFX.this) {
+                TestJavaFX.this.notify();
+                System.out.println("notify");
+            }
+        });
+    }
+
+    private void initCloseRequestWindow(Stage window)
+    {
+        window.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
+            System.out.println("Stage is closing");
+            run = true;
+            synchronized (TestJavaFX.this) {
+                TestJavaFX.this.notify();
+                System.out.println("notify");
             }
         });
     }
@@ -65,7 +75,9 @@ public abstract class TestJavaFX
                 JCoreFX jCoreFX = new JCoreFX();
                 Stage window = initWindow();
                 initCloseWindow(window);
+                initCloseRequestWindow(window);
                 unitTest(jCoreFX, window);
+                window.close();
                 System.out.println("Test done");
             }
         });
