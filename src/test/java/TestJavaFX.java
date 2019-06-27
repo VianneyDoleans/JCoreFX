@@ -1,20 +1,16 @@
 import JCoreFX.JCoreFX;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.junit.Test;
 
-public abstract class TestJavaFX
-{
+public abstract class TestJavaFX {
     private boolean run = false;
 
     public abstract void unitTest(JCoreFX jCoreFX, Stage stage);
 
-    private Stage initWindow()
-    {
+    private Stage initWindow() {
         Pane root = new Pane();
         System.out.println("Test still in progress");
         Stage window = new Stage();
@@ -26,8 +22,7 @@ public abstract class TestJavaFX
         return window;
     }
 
-    private void waitUI()
-    {
+    private void waitUI() {
         while (!run) {
             try {
                 synchronized (this) {
@@ -41,8 +36,7 @@ public abstract class TestJavaFX
         }
     }
 
-    private void initCloseWindow(Stage window)
-    {
+    private void initCloseWindow(Stage window) {
         window.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> {
             System.out.println("Stage is closing");
             run = true;
@@ -53,8 +47,7 @@ public abstract class TestJavaFX
         });
     }
 
-    private void initCloseRequestWindow(Stage window)
-    {
+    private void initCloseRequestWindow(Stage window) {
         window.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
             System.out.println("Stage is closing");
             run = true;
@@ -65,9 +58,9 @@ public abstract class TestJavaFX
         });
     }
 
-    @Test
-    public void run() throws InterruptedException {
-        Platform.startup(new Runnable() {
+    public void run() {
+        System.out.println("enter run");
+        Platform.runLater(new Runnable() {
 
             @Override
             public void run() {
@@ -76,8 +69,11 @@ public abstract class TestJavaFX
                 Stage window = initWindow();
                 initCloseWindow(window);
                 initCloseRequestWindow(window);
-                unitTest(jCoreFX, window);
-                window.close();
+                try {
+                    unitTest(jCoreFX, window);
+                } finally {
+                    window.close();
+                }
                 System.out.println("Test done");
             }
         });

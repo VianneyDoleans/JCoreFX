@@ -11,9 +11,7 @@ import JCoreFX.core.moduleConstruction.AModule;
 import JCoreFX.services.data.DataService;
 import JCoreFX.services.layout.LayoutService;
 import JCoreFX.tools.ExceptionsCatch;
-import javafx.event.EventHandler;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -43,10 +41,8 @@ public class JCoreFX {
     }
 
     private void InitEventCloseScene(Stage stage) {
-        //EventHandler<WindowEvent> event =  stage.getOnCloseRequest();
         stage.setOnCloseRequest(t -> {
             try {
-                //event.handle(t);
                 this.layoutManager.saveConfiguration(this.config.get("layout.configPath"));
                 serviceUpdater.setRun(false);
                 Log.getInstance().write(Level.INFO,"close JCoreFX");
