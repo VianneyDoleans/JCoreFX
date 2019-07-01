@@ -8,7 +8,13 @@ import javafx.stage.WindowEvent;
 public abstract class TestJavaFX {
     private boolean run = false;
 
+    private AssertionError error;
     public abstract void unitTest(JCoreFX jCoreFX, Stage stage);
+
+    public AssertionError getError()
+    {
+        return error;
+    }
 
     private Stage initWindow() {
         Pane root = new Pane();
@@ -71,7 +77,12 @@ public abstract class TestJavaFX {
                 initCloseRequestWindow(window);
                 try {
                     unitTest(jCoreFX, window);
-                } finally {
+                }
+                catch (AssertionError e)
+                {
+                    error = e;
+                }
+                finally {
                     window.close();
                 }
                 System.out.println("Test done");
