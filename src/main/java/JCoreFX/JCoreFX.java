@@ -26,7 +26,7 @@ public class JCoreFX {
     private LinkManager linkManager;
     private JSONFile config = new JSONFile("./configuration/globalConfiguration.json", JSONFile.JSONFileType.Object);
 
-    private void InitService() throws InterruptedException, IOException {
+    private void initService() throws InterruptedException, IOException {
         this.serviceManager = new ServiceManager();
         //notificationManager = new NotificationManager(serviceManager);
         this.serviceUpdater = new ServiceUpdater(serviceManager);//, notificationManager);
@@ -51,6 +51,11 @@ public class JCoreFX {
                 ExceptionsCatch.PrintErrors(e);
             }
         });
+    }
+
+    public void initLink()
+    {
+        linkManager = new LinkManager();
     }
 
     public void addLink(Link link)
@@ -81,7 +86,8 @@ public class JCoreFX {
     public boolean init(Stage stage) {
        try {
             initConfig();
-            InitService();
+            initLink();
+            initService();
             this.layoutManager.initRoot(this.config.get("layout.configPath"), new LayoutManager.RootDefaults(), serviceManager);
             this.layoutManager.initScene(stage, this.config, this.linkManager, this.serviceManager);
             InitEventCloseScene(stage);

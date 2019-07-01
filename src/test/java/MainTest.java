@@ -1,4 +1,5 @@
 import JCoreFX.JCoreFX;
+import JCoreFX.core.linkConstruction.Link;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
@@ -12,6 +13,7 @@ public class MainTest {
 
     @BeforeClass
     public static void initToolkit() {
+        Platform.setImplicitExit(false);
         Platform.startup(new Runnable() {
             @Override
             public void run() {
@@ -39,31 +41,15 @@ public class MainTest {
     }
 
     @Test
-    public void simpleInitJCoreFX2() {
-        TestJavaFX testJavaFX = new TestJavaFX() {
-            @Override
-            public void unitTest(JCoreFX jCoreFX, Stage stage) {
-                assertFalse(jCoreFX.init(stage));
-            }
-        };
-        testJavaFX.run();
-        throwError(testJavaFX.getError());
-    }
-
-    @Test
-    public void simpleInitJCoreFX3() {
+    public void simpleTestFX2() {
         TestJavaFX testJavaFX = new TestJavaFX() {
             @Override
             public void unitTest(JCoreFX jCoreFX, Stage stage) {
                 assertTrue(jCoreFX.init(stage));
+                jCoreFX.addLink(new Link("test"));
             }
         };
         testJavaFX.run();
         throwError(testJavaFX.getError());
-    }
-
-    @Test
-    public void simpletest() {
-        assertTrue(true);
     }
 }

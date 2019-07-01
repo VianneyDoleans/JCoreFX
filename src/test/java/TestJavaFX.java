@@ -1,9 +1,12 @@
 import JCoreFX.JCoreFX;
+import JCoreFX.core.log.Log;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+import java.util.logging.Level;
 
 public abstract class TestJavaFX {
     private boolean run = false;
@@ -18,7 +21,6 @@ public abstract class TestJavaFX {
 
     private Stage initWindow() {
         Pane root = new Pane();
-        System.out.println("Test still in progress");
         Stage window = new Stage();
         Scene scene = new Scene(root, 200, 200);
 
@@ -32,9 +34,9 @@ public abstract class TestJavaFX {
         while (!run) {
             try {
                 synchronized (this) {
-                    System.out.println("wait");
+                    Log.getInstance().write(Level.INFO,"wait for end of UI");
                     this.wait();
-                    System.out.println("wait done");
+                    Log.getInstance().write(Level.INFO,"received a notification, end of wait UI");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -44,33 +46,33 @@ public abstract class TestJavaFX {
 
     private void initCloseWindow(Stage window) {
         window.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> {
-            System.out.println("Stage is closing");
+            Log.getInstance().write(Level.INFO,"Stage is closing");
             run = true;
             synchronized (TestJavaFX.this) {
                 TestJavaFX.this.notify();
-                System.out.println("notify");
+                Log.getInstance().write(Level.INFO,"Notify the end of UI");
             }
         });
     }
 
     private void initCloseRequestWindow(Stage window) {
         window.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
-            System.out.println("Stage is closing");
+            Log.getInstance().write(Level.INFO,"Stage is closing by request");
             run = true;
             synchronized (TestJavaFX.this) {
                 TestJavaFX.this.notify();
-                System.out.println("notify");
+                Log.getInstance().write(Level.INFO,"Notify the end of UI");
             }
         });
     }
 
     public void run() {
-        System.out.println("enter run");
+        Log.getInstance().write(Level.INFO, "Run of JavaFX's test");
         Platform.runLater(new Runnable() {
 
             @Override
             public void run() {
-                System.out.println("Test in progress");
+                Log.getInstance().write(Level.INFO,"Test in progress");
                 JCoreFX jCoreFX = new JCoreFX();
                 Stage window = initWindow();
                 initCloseWindow(window);
@@ -83,9 +85,10 @@ public abstract class TestJavaFX {
                     error = e;
                 }
                 finally {
+                    Log.getInstance().write(Level.INFO,"Test done");
+                    Log.getInstance().write(Level.INFO,"Ask for close Test's window");
                     window.close();
                 }
-                System.out.println("Test done");
             }
         });
         waitUI();
