@@ -26,3 +26,13 @@ wrapper {
     gradleVersion = '5.4.1'
     distributionUrl = distributionUrl.replace("bin", "all")
 }
+
+jar {
+    manifest {
+        attributes "Main-Class": "JCoreFX.JCoreFX"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

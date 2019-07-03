@@ -88,7 +88,8 @@ public class JCoreFX {
             initConfig();
             initLink();
             initService();
-            this.layoutManager.initRoot(this.config.get("layout.configPath"), new LayoutManager.RootDefaults(), serviceManager);
+            initDefaultLayoutModules(new LayoutManager.RootDefaults());
+            //this.layoutManager.initRoot(this.config.get("layout.configPath"), new LayoutManager.RootDefaults(), serviceManager);
             this.layoutManager.initScene(stage, this.config, this.linkManager, this.serviceManager);
             InitEventCloseScene(stage);
         } catch (Exception ex) {
